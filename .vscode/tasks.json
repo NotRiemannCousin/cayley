@@ -8,10 +8,11 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "-std=c++23",
-                "${workspaceFolder}\\test.cpp",
+                "${workspaceFolder}\\tests\\Run.cpp",
                 "-o",
-                "${workspaceFolder}\\test.exe",
-                "-fconcepts"
+                "${workspaceFolder}\\tests\\Run.exe",
+                "-fconcepts",
+                "-lstdc++exp"
             ],
             "options": {
                 "cwd": "C:\\msys64\\mingw64\\bin"

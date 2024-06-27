@@ -3,59 +3,62 @@
 #include <typeinfo>
 #include <concepts>
 #include <vector>
-#include <span>
+#include <ranges>
+
+#ifdef _GLIBCXX_STDFLOAT
+#include <stdfloat>
+#endif
 
 #include "TensorOrientation.hpp"
 #include "../util.hpp"
 
-
-using std::vector;
 using std::remove_cv_t;
-
-
+using std::span;
+using std::vector;
 
 namespace cayley::Tensor
 {
-    template <arithmetic UnitType = float,
+    template <arithmetic UnitType = double,
               TensorOrientation Orientation = TensorOrientation::ROW_MAJOR>
     class Tensor
     {
-    public:
-#pragma region Aliases
-        using element_type           = UnitType;
-        using value_type             = remove_cv_t<UnitType>;
-        using size_type              = size_t;
-        using difference_type        = ptrdiff_t;
-        using pointer                = UnitType*;
-        using const_pointer          = const UnitType*;
-        using reference              = UnitType&;
-        using const_reference        = const UnitType&;
-        // TODO: Implement iterators
-        // using iterator               = __gnu_cxx::__normal_iterator<pointer, span>;
-        // using reverse_iterator       = std::reverse_iterator<iterator>;
-#pragma endregion
-
     private:
         TensorOrientation orientation = Orientation;
 
-        vector<UnitType> data;
-        const vector<int> dimensions;
-        const int order;
+        vector<UnitType> data{(UnitType)0};
+        vector<size_t> dimensions{};
+        size_t order = 0;
+
+        size_t calculateSize() const noexcept;
 
     public:
+#pragma region Constructors
 
-        Tensor();
+        constexpr Tensor() noexcept;
 
-        // Tensor(vector<UnitType> dimensions);
+        constexpr Tensor(UnitType scalar) noexcept;
 
-        // Tensor(vector<int> dimensions, vector<UnitType> data);
+        Tensor(span<size_t> dimensions);
 
+        Tensor(span<size_t> dimensions, span<UnitType> data);
 
+#pragma endregion
+
+#pragma region Element Access
+
+        Tensor operator[](const size_t other) const;
+
+#pragma endregion
+
+#pragma region operators
+
+        constexpr Tensor operator=(Tensor &&t) noexcept;
+
+        constexpr Tensor operator=(const Tensor &t) noexcept;
 
         // Tensor operator*(const double scalar) const;
 
         // Tensor operator /(const double scalar) const;
-
 
         // Tensor operator *(const Tensor& other) const;
 
@@ -65,11 +68,24 @@ namespace cayley::Tensor
 
         // Tensor operator -(const Tensor& other) const;
 
-
         // Tensor operator [](const int other) const;
 
-        // bool IsNull() const noexcept;
+#pragma endregion
 
+#pragma region Observers
+
+        constexpr size_t Size() const noexcept;
+
+        constexpr bool IsScalar() const noexcept;
+
+        constexpr bool IsVector() const noexcept;
+
+        constexpr bool Is2DMatrix() const noexcept;
+
+        constexpr bool Is3DMatrix() const noexcept;
+
+        constexpr span<const UnitType> Data() const noexcept;
+
+#pragma endregion
     };
-
 };

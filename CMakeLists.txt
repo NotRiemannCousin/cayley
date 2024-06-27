@@ -5,7 +5,7 @@ project(Cayley)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(test test.cpp)
+add_executable(test tests/Run.cpp)
 
 add_compile_options(-g -std=gnu++23)
-add_compile_options(-Wall -fconcepts)
+add_compile_options(-Wall -fconcepts -lstdc++exp)

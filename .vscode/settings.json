@@ -5,7 +5,8 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true
+        "**/Thumbs.db": true,
+        "**/*.exe": true
     },
     "hide-files.files": [],
     "files.associations": {
@@ -62,6 +63,11 @@
         "text_encoding": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
-    }
+        "variant": "cpp",
+        "ranges": "cpp"
+    },
+    "betterAlign.alignAfterTypeEnter": true,
+    "betterAlign.operatorPadding"    : "left",
+    "prettier.printWidth"            : 120,
+    "prettier.trailingComma"         : "all",
 }
