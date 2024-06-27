@@ -1,20 +1,10 @@
 #pragma once
-#include <type_traits>
-#include <typeinfo>
-#include <concepts>
-#include <vector>
-#include <span>
-
-
 #include "../../include/Tensor/Tensor.hpp"
-
 
 namespace cayley::Tensor
 {
 
-    // template <Number UnitType = float,
-    //           TensorOrientation Orientation = TensorOrientation::ROW_MAJOR>
-    
-    Tensor::Tensor(){
-    };
+    template <arithmetic UnitType,
+              TensorOrientation Orientation>
+    Tensor<UnitType, Orientation>::Tensor() : data{0}, dimensions{1}, order{1} {};
 }

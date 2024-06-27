@@ -11,6 +11,9 @@
                 "_UNICODE"
             ],
             "compilerPath": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+            "compilerArgs": [
+                "-fconcepts"
+            ],
             "cStandard": "c23",
             "cppStandard": "c++23",
             "intelliSenseMode": "windows-gcc-x64"

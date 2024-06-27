@@ -10,24 +10,40 @@
 
 
 using std::vector;
+using std::remove_cv_t;
 
 
 
 namespace cayley::Tensor
 {
-    // template <Number UnitType = float,
-    //           TensorOrientation Orientation = TensorOrientation::ROW_MAJOR>
+    template <arithmetic UnitType = float,
+              TensorOrientation Orientation = TensorOrientation::ROW_MAJOR>
     class Tensor
     {
-    private:
-        // TensorOrientation orientation = Orientation;
+    public:
+#pragma region Aliases
+        using element_type           = UnitType;
+        using value_type             = remove_cv_t<UnitType>;
+        using size_type              = size_t;
+        using difference_type        = ptrdiff_t;
+        using pointer                = UnitType*;
+        using const_pointer          = const UnitType*;
+        using reference              = UnitType&;
+        using const_reference        = const UnitType&;
+        // TODO: Implement iterators
+        // using iterator               = __gnu_cxx::__normal_iterator<pointer, span>;
+        // using reverse_iterator       = std::reverse_iterator<iterator>;
+#pragma endregion
 
-        // type_info element_type = typeid(UnitType);
-        // vector<UnitType> data;
-        // const vector<int> dimensions;
-        // const int order;
+    private:
+        TensorOrientation orientation = Orientation;
+
+        vector<UnitType> data;
+        const vector<int> dimensions;
+        const int order;
 
     public:
+
         Tensor();
 
         // Tensor(vector<UnitType> dimensions);
