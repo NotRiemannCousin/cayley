@@ -11,7 +11,8 @@
                 "${workspaceFolder}\\test.cpp",
                 "-o",
                 "${workspaceFolder}\\test.exe",
-                "-fconcepts"
+                "-fconcepts",
+                "-lstdc++exp"
             ],
             "options": {
                 "cwd": "C:\\msys64\\mingw64\\bin"
