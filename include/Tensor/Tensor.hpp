@@ -18,8 +18,8 @@ using std::vector;
 
 namespace cayley::Tensor
 {
-    template <arithmetic UnitType = double,
-              TensorOrientation Orientation = TensorOrientation::ROW_MAJOR>
+    template          <arithmetic UnitType = double,
+    TensorOrientation Orientation          = TensorOrientation::ROW_MAJOR>
     class Tensor
     {
     private:
