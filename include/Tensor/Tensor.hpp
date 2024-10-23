@@ -9,7 +9,6 @@
 #include <stdfloat>
 #endif
 
-#include "TensorOrientation.hpp"
 #include "../util.hpp"
 
 using std::remove_cv_t;
@@ -18,8 +17,7 @@ using std::vector;
 
 namespace cayley::Tensor
 {
-    template          <arithmetic UnitType = double,
-    TensorOrientation Orientation          = TensorOrientation::ROW_MAJOR>
+    template          <arithmetic UnitType = double>
     class Tensor
     {
     private:
