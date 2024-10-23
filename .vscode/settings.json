@@ -6,7 +6,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/*.exe": true
+        "**/*.exe": true,
+        "build/": true,
     },
     "hide-files.files": [],
     "files.associations": {
