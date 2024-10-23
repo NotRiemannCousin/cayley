@@ -11,8 +11,8 @@ static_assert(false && "GLIBCXX_STDFLOAT is not defined\n");
 #endif
 
 using namespace std::literals::string_literals;
-using std::print;
 using std::println;
+using std::print;
 using std::string;
 
 int main()
@@ -25,20 +25,25 @@ int main()
     const auto GREEN   = "\e[32m"s;
     const auto GRAY    = "\e[90m"s;
     const auto RED     = "\e[91m"s;
-    const auto RESTORE = "\e[0m"s;
+    const auto CLEAR   = "\e[0m"s;
 
-    const string stringOK  = GREEN + "OK  ";
-    const string stringBAD = RED   + "BAD ";
+    const string stringOK  = GREEN + "OK  " + CLEAR;
+    const string stringBAD = RED   + "BAD " + CLEAR;
+
+
 
     for (auto const &[runMajorTest, testName] : MajorTests)
     {
         println("{}Major UnitTest: {}", YELLOW, testName);
 
         for (auto unit : runMajorTest())
+        {
+            
             println("\t{} {}", unit.result ? stringOK : stringBAD,
                     GRAY + unit.name);
+        }
 
-        println("{}", RESTORE);
+        println("{}", CLEAR);
     }
 
     return 0;

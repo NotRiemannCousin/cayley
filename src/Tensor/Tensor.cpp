@@ -11,77 +11,59 @@ using std::move;
 namespace cayley::Tensor
 {
 
-#pragma region private
+// #pragma region private
 
-    template <arithmetic UnitType>
-    size_t Tensor<UnitType>::calculateSize() const noexcept
-    {
-        int count = 1;
-        for (int dimension : dimensions)
-            count *= dimension;
-        return count;
-    }
-
-#pragma endregion
+// #pragma endregion
 
 #pragma region Constructors
-    // * Empty constructor, scalar tensor
-    template <arithmetic UnitType>
-    constexpr Tensor<UnitType>::Tensor() noexcept = default;
+    // * Empty constructor, tensor os initialized with zeros
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr Tensor<UnitType, Dims...>::Tensor() noexcept: m_data{} {};
 
-    // * Scalar constructor
-    template <arithmetic UnitType>
-    constexpr Tensor<UnitType>::Tensor(UnitType scalar) noexcept : data{scalar} {};
-
-    template <arithmetic UnitType>
-    Tensor<UnitType>::Tensor(span<size_t> dimensions): dimensions{dimensions}, order{dimensions.size()}
-    {
-        data.resize(calculateSize());
+      // * Initialize the tensor with an value
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr Tensor<UnitType, Dims...>::Tensor(UnitType value) noexcept {
+        m_data.fill(value);
     };
 
-    template <arithmetic UnitType>
-    Tensor<UnitType>::Tensor(span<size_t> dimensions, span<UnitType> data) : dimensions{dimensions}, data{data}, order{dimensions.size()}
-    {
-        if (data() != calculateSize())
-            throw InvalidArgumentException("Data can't be assigned to this tensor.");
-    };
+    // * Array constructor
+    template <arithmetic UnitType, size_t... Dims>
+    Tensor<UnitType, Dims...>::Tensor(Tensor<UnitType, Dims...>::underlying_array data) : m_data{data} {};
+
 #pragma endregion
 
 #pragma region Operators
 
-    // template <arithmetic UnitType>
-    // constexpr Tensor<UnitType> Tensor<UnitType>::operator=(Tensor<UnitType> &&t) noexcept{
-    //     data        = move(t.data);
-    //     dimensions  = move(remove_cv_t<decltype(t.dimensions)>(t.dimensions));
-    //     order       = move(t.order);
-    //     orientation = move(t.orientation);
-
-    //     return this;
-    // };
-    // template <arithmetic UnitType>
-    // constexpr Tensor<UnitType> Tensor<UnitType>::operator=(const Tensor<UnitType> &t) noexcept{
-    //     data        = t.data;
-    //     dimensions  = t.dimensions;
-    //     order       = t.order;
-    //     orientation = t.orientation;
-
-    //     return *this;
-    // };
+    
 
 #pragma endregion
 
 #pragma region Observers
-    template <arithmetic UnitType>
-    constexpr bool Tensor<UnitType>::IsScalar() const noexcept { return order == 0; };
 
-    template <arithmetic UnitType>
-    constexpr bool Tensor<UnitType>::IsVector() const noexcept { return order == 1; };
+    // * Checks if the tensor is a scalar (0D)
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr bool Tensor<UnitType, Dims...>::IsScalar() const noexcept { return Rank == 0; };
 
-    template <arithmetic UnitType>
-    constexpr bool Tensor<UnitType>::Is2DMatrix() const noexcept { return order == 2; };
+    // * Checks if the tensor is a vector (1D)
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr bool Tensor<UnitType, Dims...>::IsVector() const noexcept { return Rank == 1; };
 
-    template <arithmetic UnitType>
-    constexpr span<const UnitType> Tensor<UnitType>::Data() const noexcept { return span(data); };
+    // * Checks if the tensor is a matrix (2D)
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr bool Tensor<UnitType, Dims...>::IsMatrix() const noexcept { return Rank == 2; };
+
+    // * Checks if the tensor is a matrix (2x2)
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr bool Tensor<UnitType, Dims...>::Is2x2Matrix() const noexcept { return Shape == (2, 2); };
+
+    // * Checks if the tensor is a matrix (3x3)
+    template <arithmetic UnitType, size_t... Dims>
+    constexpr bool Tensor<UnitType, Dims...>::Is3x3Matrix() const noexcept { return Shape == (3, 3); };
+
+
+    // * Returns and span to the underlying data
+    template <arithmetic UnitType, size_t... Dims>
+    auto Tensor<UnitType, Dims...>::Data() const noexcept { return span(m_data); };
 
 #pragma endregion
 }

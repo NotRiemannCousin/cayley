@@ -2,8 +2,8 @@
 #include <type_traits>
 #include <typeinfo>
 #include <concepts>
-#include <vector>
 #include <ranges>
+#include <array>
 
 #ifdef _GLIBCXX_STDFLOAT
 #include <stdfloat>
@@ -12,78 +12,97 @@
 #include "../util.hpp"
 
 using std::remove_cv_t;
+using std::array;
 using std::span;
-using std::vector;
+
+// Tensors are limited to 2GB of memory
+static constexpr size_t MemoryLimit = 1LL << 31;
 
 namespace cayley::Tensor
 {
-    template          <arithmetic UnitType = double>
-    class Tensor
-    {
-    private:
-        TensorOrientation orientation = Orientation;
+	template <arithmetic UnitType = double, size_t... Dims>
+	class Tensor
+	{
+	public: 
+		  // using ReduceTensor = Tensor<UnitType, remove_first<Dims...>...>;
 
-        vector<UnitType> data{(UnitType)0};
-        vector<size_t> dimensions{};
-        size_t order = 0;
+		// * The number of dimensions in the tensor
+		static constexpr size_t Rank = sizeof...(Dims);
+		// * The number of elements in the tensor
+		static constexpr size_t Size = (1 * ... * Dims);
+		// * The shape of the tensor
+		static constexpr size_t Shape[] = {Dims...};
 
-        size_t calculateSize() const noexcept;
 
-    public:
+
+		// * The maximum number of elements in the tensor
+		static constexpr size_t MaxSize = MemoryLimit / sizeof(UnitType);
+		// static_assert(Size <= MaxSize, "Tensor is too large");
+
+
+
+		// * using ReducedTensor = Tensor<UnitType, remove_first<Dims...>>;
+		using underlying_array = array<UnitType, Size>;
+
+	private:
+		// * The array that stores the data
+		underlying_array m_data;
+
+	public:
 #pragma region Constructors
 
-        constexpr Tensor() noexcept;
+		constexpr Tensor() noexcept;
 
-        constexpr Tensor(UnitType scalar) noexcept;
+		constexpr Tensor(UnitType value) noexcept;
 
-        Tensor(span<size_t> dimensions);
-
-        Tensor(span<size_t> dimensions, span<UnitType> data);
+		Tensor(underlying_array data);
 
 #pragma endregion
 
 #pragma region Element Access
 
-        Tensor operator[](const size_t other) const;
+		Tensor operator[](const size_t other) const;
 
 #pragma endregion
 
 #pragma region operators
+		// Tensor operator*(const double scalar) const;
 
-        constexpr Tensor operator=(Tensor &&t) noexcept;
+		// Tensor operator/(const double scalar) const;
 
-        constexpr Tensor operator=(const Tensor &t) noexcept;
+		
 
-        // Tensor operator*(const double scalar) const;
+		// Tensor operator+(const Tensor& other) const;
 
-        // Tensor operator /(const double scalar) const;
+		// Tensor operator-(const Tensor& other) const;
+	
+		// Tensor ComponentwiseMult(const Tensor& other) const;
 
-        // Tensor operator *(const Tensor& other) const;
+		// Tensor ComponentwiseDiv(const Tensor& other) const;
 
-        // Tensor operator /(const Tensor& other) const;
-
-        // Tensor operator +(const Tensor& other) const;
-
-        // Tensor operator -(const Tensor& other) const;
-
-        // Tensor operator [](const int other) const;
+		// auto operator[](const int other) const;
 
 #pragma endregion
 
 #pragma region Observers
 
-        constexpr size_t Size() const noexcept;
+		constexpr bool IsScalar() const noexcept;
 
-        constexpr bool IsScalar() const noexcept;
+		constexpr bool IsVector() const noexcept;
 
-        constexpr bool IsVector() const noexcept;
+		constexpr bool IsMatrix() const noexcept;
 
-        constexpr bool Is2DMatrix() const noexcept;
+		constexpr bool Is2x2Matrix() const noexcept;
 
-        constexpr bool Is3DMatrix() const noexcept;
+		constexpr bool Is3x3Matrix() const noexcept;
 
-        constexpr span<const UnitType> Data() const noexcept;
+		auto Data() const noexcept;
+		// span<UnitType> Data() const noexcept;
 
 #pragma endregion
-    };
+	};
+
+	  // Matrix Especialization
+	
+
 };
