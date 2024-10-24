@@ -6,7 +6,6 @@
 #include <tuple>
 
 #ifndef _GLIBCXX_STDFLOAT
-// std::println("GLIBCXX_STDFLOAT is not defined");
 static_assert(false && "GLIBCXX_STDFLOAT is not defined\n");
 #endif
 
@@ -17,8 +16,12 @@ using std::string;
 
 int main()
 {
-    MajorTest MajorTests[] = {
-        {checkScalarTest, "Scalar Tests"},
+    MainTest MainTests[] = {
+        IntScalarTest(),
+        FloatScalarTest(),
+        DoubleScalarTest(),
+        Float128ScalarTest(),
+        BrainFloatScalarTest(),
     };
 
     const auto YELLOW  = "\e[33m"s;
@@ -32,11 +35,11 @@ int main()
 
 
 
-    for (auto const &[runMajorTest, testName] : MajorTests)
+    for (auto const &[runMainTest, testName] : MainTests)
     {
-        println("{}Major UnitTest: {}", YELLOW, testName);
+        println("{}Main UnitTest: {}", YELLOW, testName);
 
-        for (auto unit : runMajorTest())
+        for (auto unit : runMainTest())
         {
             
             println("\t{} {}", unit.result ? stringOK : stringBAD,

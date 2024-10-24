@@ -1,8 +1,11 @@
+#include <functional>
 #include <string>
 #include <vector>
 
+using std::function;
 using std::string;
 using std::vector;
+
 
 struct UnitTest
 {
@@ -10,8 +13,8 @@ struct UnitTest
     string name;
 };
 
-struct MajorTest
+struct MainTest
 {
-    vector<UnitTest> (*majorTest)();
+    function<vector<UnitTest>()> runMainTest;
     string name;
 };
