@@ -23,20 +23,25 @@ template<typename T>
 static vector<UnitTest> checkScalarTest(const string testName, const T value)
 {
     vector<UnitTest> results;
-    bool test1, test2, test3;
+    bool test1, test2, test3, test4;
 
     Tensor<T> tensor;
 
     test1 = tensor.IsScalar();
     test2 = tensor.Data().size() == 1 && tensor.Data()[0] == 0;
 
+
     auto t1 = Tensor<T>(value);
     test3 = t1.Data().size() == 1 && t1.Data()[0] == value;
 
 
+    if  constexpr (!requires { typename Tensor<T>::ReducedTensor; })
+        test4 = true;
+
     results.emplace_back(test1, testName + " uniqueness");
     results.emplace_back(test2, testName + " default value");
     results.emplace_back(test3, testName + " assigment");
+    results.emplace_back(test4, testName + " irreducible");
 
     return results;
 }

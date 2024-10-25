@@ -16,6 +16,8 @@ namespace cayley::Tensor
 // #pragma endregion
 
 #pragma region Constructors
+    // constexpr Tensor(UnitType value, const size_t... Dims) noexcept;
+
     // * Empty constructor, tensor os initialized with zeros
     template <arithmetic UnitType, size_t... Dims>
     constexpr Tensor<UnitType, Dims...>::Tensor() noexcept: m_data{} {};

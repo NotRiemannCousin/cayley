@@ -16,7 +16,7 @@ using std::string;
 
 int main()
 {
-    MainTest MainTests[] = {
+    const MainTest MainTests[] = {
         IntScalarTest(),
         FloatScalarTest(),
         DoubleScalarTest(),
@@ -37,7 +37,7 @@ int main()
 
     for (auto const &[runMainTest, testName] : MainTests)
     {
-        println("{}Main UnitTest: {}", YELLOW, testName);
+        println("{}Test: {}", YELLOW, testName);
 
         for (auto unit : runMainTest())
         {
